@@ -31,7 +31,7 @@ const WorkoutDetails = ({workout}) => {
             reps: updatedReps,
         };
 
-        const response = await fetch('/api/workouts/' + workout._id, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/${workout._id}`, {
             method: 'PATCH', // Ensure your backend supports PUT
             headers: {
                 'Content-Type': 'application/json',
