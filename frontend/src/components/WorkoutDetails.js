@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useWorkoutContext } from "../hooks/useWorkoutsContext"
+import { useAuthContext } from "../hooks/useAuthContext";
 
 //date-fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 
 const WorkoutDetails = ({workout}) => {
     const { dispatch } = useWorkoutContext()
+    const { user } = useAuthContext()
 
     const [isEditing, setIsEditing] = useState(false);
     const [updatedTitle, setUpdatedTitle] = useState(workout.title);
@@ -13,8 +15,16 @@ const WorkoutDetails = ({workout}) => {
     const [updatedReps, setUpdatedReps] = useState(workout.reps);
 
     const handleDelete = async () => {
+
+        if (!user) {
+            return
+        }
+
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/${workout._id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
         })
         const json = await response.json()
 
@@ -31,10 +41,15 @@ const WorkoutDetails = ({workout}) => {
             reps: updatedReps,
         };
 
+        if (!user) {
+            return
+        }
+
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/${workout._id}`, {
             method: 'PATCH', // Ensure your backend supports PUT
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             },
             body: JSON.stringify(updatedWorkout),
         });
