@@ -27,3 +27,10 @@ function App() {
 }
 
 export default App;
+
+
+// stxr@gachanoxx.com
+// StxrrySkys
+
+// sky@gachanoxx.com
+// StxrrySkys
